@@ -1,20 +1,30 @@
 <script lang="ts">
 	import { positiveListPath, filePathList } from "../../stores";
+	import type { Unsubscriber } from "svelte/store";
+	import { onDestroy } from "svelte";
 
-  $: positiveList = fileListUpdate();
+  let positiveList: string = '';
 
-  function fileListUpdate(): string {
-    let txt: string = '';
-    if ($filePathList == undefined) return txt;
+  const unsubscribe: Unsubscriber = filePathList.subscribe(value => {
+    update();
+  });
+  onDestroy(unsubscribe);
 
-    txt = '';
+  const unsubscribe2: Unsubscriber = positiveListPath.subscribe(value => {
+    update();
+  });
+  onDestroy(unsubscribe2);
+
+  function update(): void {
+    if ($filePathList == undefined) return;
+
+    positiveList = '';
     for (let filePath of $filePathList) {
       console.log(filePath[1]);
       // 未判定またはnegativeはスキップ
       if (filePath[1] == '' || filePath[1].split(" ").length < 2) continue;
-        txt = txt + $positiveListPath + filePath[1] + '\n';
+        positiveList = positiveList + $positiveListPath + filePath[1] + '\n';
     }
-    return txt;
   }
 </script>
 
