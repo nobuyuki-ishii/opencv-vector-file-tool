@@ -1,8 +1,6 @@
 <script lang="ts">
 	import { afterUpdate, onMount } from "svelte";
-	import { loop_guard } from "svelte/internal";
   import { filePathList, selectedPicture, rectList, isPictureChange } from "../stores";
-	import ClearButton from "./ClearButton.svelte";
 
   let startX: number = 0; // 四角の描画開始点x
   let startY: number = 0; // 四角の描画開始点y
@@ -45,6 +43,13 @@
     canvas.addEventListener("mouseup", function(event: any) {
       console.log("called mouseup.");
       isMouseClick = false;
+      endX = event.offsetX;
+      endY = event.offsetY;
+
+      // 四角になっていない場合、終了
+      if (startX == endX) return;
+      if (startY == endY) return;
+
       saveRect();
       console.log("[" + startX + ", " + startY + ", " + endX + ", " + endY + "]");
     });
@@ -164,7 +169,6 @@
     // 直近描画情報を保存
     let rect: any = [beforeStartX, beforeStartY, beforeSizeX, beforeSizeY];
     $rectList = [...$rectList, rect];
-    //$rectList.push(rect);
     console.log($rectList);
   }
 </script>

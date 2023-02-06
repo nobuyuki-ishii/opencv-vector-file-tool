@@ -4,6 +4,7 @@
   function read(): void {
     let fileDataList: any = [];
     for (let filePath of $inputFilePathes.split("\n")) {
+      if (filePath == '') continue;
       fileDataList.push([filePath, '']);
     }
     filePathList.set(fileDataList);
@@ -15,7 +16,7 @@
   }
 
   function testData(): void {
-    $inputFilePathes = "http://141-lab.com/ruru_api/images/20230124182802.jpg\nhttp://141-lab.com/ruru_api/images/20230124192722.jpg\nhttp://141-lab.com/ruru_api/images/20230123210130.jpg\n";
+    $inputFilePathes = "http://141-lab.com/ruru_api/images/20230124182802.jpg\nhttp://141-lab.com/ruru_api/images/20230124192722.jpg\nhttp://141-lab.com/ruru_api/images/20230123210130.jpg";
     read();
   }
 </script>

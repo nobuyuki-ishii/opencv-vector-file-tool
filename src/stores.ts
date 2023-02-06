@@ -11,6 +11,6 @@ export const rectList: any = writable();
 // 写真を変更したか
 export const isPictureChange: any = writable();
 // positive listのパス
-export const positiveListPath: any = writable();
+export const positiveListPath: any = writable('');
 // negative listのパス
-export const negativeListPath: any = writable();
+export const negativeListPath: any = writable('');
