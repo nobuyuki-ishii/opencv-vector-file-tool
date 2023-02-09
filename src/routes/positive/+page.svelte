@@ -1,29 +1,29 @@
 <script lang="ts">
-	import { positiveListPath, filePathList } from "../../stores";
+	import { positiveListPathStore, filePathListStore } from "../../stores";
 	import type { Unsubscriber } from "svelte/store";
 	import { onDestroy } from "svelte";
 
   let positiveList: string = '';
 
-  const unsubscribe: Unsubscriber = filePathList.subscribe(value => {
+  const unsubscribe: Unsubscriber = filePathListStore.subscribe(value => {
     update();
   });
   onDestroy(unsubscribe);
 
-  const unsubscribe2: Unsubscriber = positiveListPath.subscribe(value => {
+  const unsubscribe2: Unsubscriber = positiveListPathStore.subscribe(value => {
     update();
   });
   onDestroy(unsubscribe2);
 
   function update(): void {
-    if ($filePathList == undefined) return;
+    if ($filePathListStore == undefined) return;
 
     positiveList = '';
-    for (let filePath of $filePathList) {
+    for (let filePath of $filePathListStore) {
       console.log(filePath[1]);
       // 未判定またはnegativeはスキップ
       if (filePath[1] == '' || filePath[1].split(" ").length < 2) continue;
-        positiveList = positiveList + $positiveListPath + filePath[1] + '\n';
+        positiveList = positiveList + $positiveListPathStore + filePath[1] + '\n';
     }
   }
 </script>
@@ -34,7 +34,7 @@
     <div class="ui form">
       <div class="field">
         <label>Positive List File Path</label>
-        <input type="text" name="first-name" bind:value={$positiveListPath}>
+        <input type="text" name="first-name" bind:value={$positiveListPathStore}>
       </div>
       <div class="field">
         <label>Positive List</label>

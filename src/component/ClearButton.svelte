@@ -1,12 +1,14 @@
 <script lang="ts">
-  import { rectList } from "../stores";
+  import { rectListStore } from "../stores";
   function clear(): void {
-    //$rectList = [];
-    rectList.set([]);
+    $rectListStore = [];
+    //rectList.set([]);
   }
 </script>
 
-<button class="ui button" on:click={clear}>Clear</button>
+<span>
+  <button class="ui button" on:click={clear}>Clear</button>
+</span>
 
 <style>
 

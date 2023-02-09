@@ -1,22 +1,22 @@
 <script lang="ts">
-	import { inputFilePathes, filePathList, selectedPicture } from "../../stores";
+	import { inputFilePathStore, filePathListStore, selectedPictureStore } from "../../stores";
 
   function read(): void {
     let fileDataList: any = [];
-    for (let filePath of $inputFilePathes.split("\n")) {
+    for (let filePath of $inputFilePathStore.split("\n")) {
       if (filePath == '') continue;
       fileDataList.push([filePath, '']);
     }
-    filePathList.set(fileDataList);
-    console.log($filePathList);
+    filePathListStore.set(fileDataList);
+    console.log($filePathListStore);
 
-    if ($filePathList.length > 0) {
-      selectedPicture.set("#pic-0");
+    if ($filePathListStore.length > 0) {
+      selectedPictureStore.set("#pic-0");
     }
   }
 
   function testData(): void {
-    $inputFilePathes = "http://141-lab.com/ruru_api/images/20230124182802.jpg\nhttp://141-lab.com/ruru_api/images/20230124192722.jpg\nhttp://141-lab.com/ruru_api/images/20230123210130.jpg";
+    $inputFilePathStore = "http://141-lab.com/ruru_api/images/20230124182802.jpg\nhttp://141-lab.com/ruru_api/images/20230124192722.jpg\nhttp://141-lab.com/ruru_api/images/20230123210130.jpg";
     read();
   }
 </script>
@@ -27,7 +27,7 @@
     <div class="ui form">
       <div class="field">
         <label>File pathes</label>
-        <textarea id="textarea" bind:value={$inputFilePathes}></textarea>
+        <textarea id="textarea" bind:value={$inputFilePathStore}></textarea>
       </div>
       <button class="ui button" on:click={read}>Read</button>
       <button class="ui button" on:click={testData}>test data</button>

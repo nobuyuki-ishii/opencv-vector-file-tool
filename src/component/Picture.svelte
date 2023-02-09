@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { afterUpdate, onMount } from "svelte";
-  import { filePathList, selectedPicture, rectList, isPictureChange } from "../stores";
+  import { filePathListStore, selectedPictureStore, rectListStore, isPictureChangeStore } from "../stores";
 
   let startX: number = 0; // 四角の描画開始点x
   let startY: number = 0; // 四角の描画開始点y
@@ -28,7 +28,7 @@
       isMouseClick = true;
       startX = event.offsetX;
       startY = event.offsetY;
-      //let pic: any = document.querySelector($selectedPicture);
+      //let pic: any = document.querySelector($selectedPictureStore);
       //console.log("[" + startX + ", " + startY + "] => [" + Math.trunc(startX * pic.naturalWidth / width) + ", " + Math.trunc(startY * pic.naturalHeight / height) + "]");
       console.log("[" + startX + ", " + startY + "]");
     });
@@ -55,17 +55,17 @@
     });
 
     ctx = canvas.getContext("2d");
-    $rectList = [];
-    $isPictureChange = true;
+    $rectListStore = [];
+    $isPictureChangeStore = true;
   });
 
   afterUpdate(() => {
     // todo
     // import時だけここで処理するにする
     // 初期表示、next, prevによる写真変更及び四角のクリアで写真を再表示する
-    if ($isPictureChange || $rectList.length == 0) {
-      $isPictureChange = false;
-      let pic: any = document.querySelector($selectedPicture);
+    if ($isPictureChangeStore || $rectListStore.length == 0) {
+      $isPictureChangeStore = false;
+      let pic: any = document.querySelector($selectedPictureStore);
       console.log(pic);
       if (pic != undefined) {
         if (pic.complete) {
@@ -84,7 +84,7 @@
   // canvasに写真と描画済みの四角を描く
   function updateCanvas(): void {
     // 写真の表示
-    let pic: any = document.querySelector($selectedPicture);
+    let pic: any = document.querySelector($selectedPictureStore);
     canvas.style.width = String(pic.naturalWidth + "px");
     canvas.style.height = String(pic.naturalHeight + "px");
     canvas.width = pic.naturalWidth;
@@ -92,8 +92,8 @@
     ctx.drawImage(pic, 0, 0, width, height);
 
     // 描画ずみの四角を復元
-    for (let i: number = 0; i < $rectList.length; i++) {
-      drawRect2canvas($rectList[i][0], $rectList[i][1], $rectList[i][2], $rectList[i][3]);
+    for (let i: number = 0; i < $rectListStore.length; i++) {
+      drawRect2canvas($rectListStore[i][0], $rectListStore[i][1], $rectListStore[i][2], $rectListStore[i][3]);
     }
   }
 
@@ -168,15 +168,15 @@
   function saveRect(): void {
     // 直近描画情報を保存
     let rect: any = [beforeStartX, beforeStartY, beforeSizeX, beforeSizeY];
-    $rectList = [...$rectList, rect];
-    console.log($rectList);
+    $rectListStore = [...$rectListStore, rect];
+    console.log($rectListStore);
   }
 </script>
 
 <div class="center">
   <canvas></canvas>
-  {#if $filePathList != undefined}
-    {#each $filePathList as filePath, i}
+  {#if $filePathListStore != undefined}
+    {#each $filePathListStore as filePath, i}
       <img id="pic-{String(i)}" src={filePath[0]} class="no-display" alt=""/>
     {/each}
   {/if}

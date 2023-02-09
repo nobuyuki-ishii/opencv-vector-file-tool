@@ -1,42 +1,43 @@
 <script lang="ts">
-  import { rectList, selectedPicture, filePathList } from "../stores";
+  import { rectListStore, selectedPictureStore, filePathListStore } from "../stores";
+  import { changePicture, getSelectedPictureIndex } from "../lib/common";
 
-  $: buttonText = $rectList == undefined || $rectList.length > 0 ? 'Positive' : 'Negative';
-  $: buttonClass = $rectList == undefined || $rectList.length > 0 ? 'ui button blue huge' : 'ui button red huge';
+  $: buttonText = $rectListStore == undefined || $rectListStore.length > 0 ? 'Positive' : 'Negative';
+  $: buttonClass = $rectListStore == undefined || $rectListStore.length > 0 ? 'ui button blue huge' : 'ui button red huge';
 
   function judge(): void {
     let idx: number = getSelectedPictureIndex();
     let fileName: string = getSelectedPictureFileName();
 
-    if ($rectList.length > 0) {
+    if ($rectListStore.length > 0) {
       // positive
       console.log(fileName);
-      $filePathList[idx][1] = fileName + ' ' + $rectList.length;
-      for (let rect of $rectList) {
-        $filePathList[idx][1] = $filePathList[idx][1] + ' ' + rect.join(" ");
+      $filePathListStore[idx][1] = fileName + ' ' + $rectListStore.length;
+      for (let rect of $rectListStore) {
+        $filePathListStore[idx][1] = $filePathListStore[idx][1] + ' ' + rect.join(" ");
       }
-      console.log($filePathList);
+      console.log($filePathListStore);
     } else {
       // negative
-      $filePathList[idx][1] = fileName;
-      console.log($filePathList);
+      $filePathListStore[idx][1] = fileName;
+      console.log($filePathListStore);
     }
-  }
-
-  function getSelectedPictureIndex(): number {
-    let pic: any = document.querySelector($selectedPicture);
-    return Number(pic.id.split("-")[1]);
+    // 次の写真へ
+    $rectListStore = [];
+    changePicture(1);
   }
 
   function getSelectedPictureFileName(): string {
-    let pic: any = document.querySelector($selectedPicture);
+    let pic: any = document.querySelector($selectedPictureStore);
     let filePath: any = pic.getAttribute('src').split('/');
     return filePath[filePath.length - 1];
   }
 
 </script>
 
-<button class={buttonClass} on:click={judge}>{buttonText}</button>
+<span>
+  <button class={buttonClass} on:click={judge}>{buttonText}</button>
+</span>
 
 <style>
   button {
